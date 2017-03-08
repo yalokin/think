@@ -9,12 +9,9 @@ c = gets.to_f
 
 # Находим гипотенузу и переопределяем стороны
 if a > b && a > c
-	hypotenuse = a
-	a = b
-    b = c
+  hypotenuse, a, b = a, b, c
 elsif b > a && b > c
-	hypotenuse = b
-	b = c
+	hypotenuse , b = b, c
 elsif c > a && c > b
 	hypotenuse = c
 else
@@ -22,7 +19,7 @@ else
 end
 
 #  если гипотенуза есть, вычисляем по формуле Пифагора
-if hypotenuse && hypotenuse**2 == a**2 + b**2
+if hypotenuse && hypotenuse ** 2 == a**2 + b ** 2
 	puts "The triangle is rectangular"
 elsif hypotenuse
 	puts "The triangle is not rectangular"	
