@@ -1,13 +1,13 @@
-print "Enter coefficient a: "
+print "Введите коэффициент a: "
 a = gets.to_f
 if a == 0
 	puts "На ноль делить нельзя!"
 	exit
 end
 
-print "Enter coefficient b: "
+print "Введите коэффициент b: "
 b = gets.to_f
-print "Enter coefficient c: "
+print "Введите коэффициент c: "
 c = gets.to_f
 
 d = b ** 2 - 4.0 * a * c
