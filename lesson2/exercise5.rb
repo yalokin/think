@@ -5,13 +5,13 @@ month = gets.chomp.to_i
 print "Введите год: "
 year = gets.to_i
 
-months = [nil, 31, 28, 31, 30, 31 ,30, 31, 31, 30, 31 ,30, 31]
+months = [31, 28, 31, 30, 31 ,30, 31, 31, 30, 31 ,30, 31]
 
 if (year % 4 == 0 && year % 100 > 0 ) || year % 400 == 0
-  months[2] = 29
+  months[1] = 29
 end
 
-if month < 1 || month > 12 || day < 1 || day > months[month]
+if month < 1 || month > 12 || day < 1 || day > months[month-1]
   puts "Неверная дата!"
   exit
 end
@@ -19,7 +19,7 @@ end
 date_number = 0
 
 if month > 1
-  (1...month).each { |i| date_number += months[i] }
+  (0..month - 2).each { |i| date_number += months[i] }
 end
 
   date_number += day
