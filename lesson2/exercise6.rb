@@ -1,9 +1,11 @@
 basket = {}
+total_amount = 0.0
+
 loop do
   print "Введите название товара: "
   name = gets.chomp
-  unless basket[name].nil?
-    puts "Товар с таким именем уже есть в корзине"
+  if basket[name]
+    puts "Товар с таким именем уже есть в корзине!"
     next  
   end
   break if name.upcase == 'СТОП'
@@ -14,11 +16,8 @@ loop do
   quantity  = gets.chomp.to_f
   item_basket = { price: price, quantity: quantity, sum: price * quantity }
   basket[name] = item_basket
+  total_amount += item_basket[:sum]
 end
-
-total_amount = 0.0
-
-basket.each_value { |value| total_amount += value[:sum]}
 
 puts basket
 puts "Итоговая сумма покупок: #{total_amount}"

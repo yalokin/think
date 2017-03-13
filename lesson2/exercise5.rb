@@ -19,12 +19,9 @@ end
 date_number = 0
 
 if month > 1
-  for i in 1..month-1
-    date_number += months[i]
-  end
-  date_number += day
-else
-  date_number += day
+  (1..month-1).each { |i| date_number += months[i] }
 end
+
+  date_number += day
 
 puts "Порядковый номер даты #{day}.#{month}.#{year} равен: #{date_number}"
