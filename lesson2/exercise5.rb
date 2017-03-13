@@ -19,7 +19,7 @@ end
 date_number = 0
 
 if month > 1
-  (1..month-1).each { |i| date_number += months[i] }
+  (1...month).each { |i| date_number += months[i] }
 end
 
   date_number += day
