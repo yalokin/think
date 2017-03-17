@@ -25,9 +25,10 @@ bel_msk.add_station(orel)
 
 train1.add_route(bel_msk)
 
+p belgorod.trains
 #p train1.route.stations[0]
-train1.move_next
-p train1.next
+#train1.move_next
+#p train1.next
 
 #p belgorod.trains_by_type('cargo')
 =begin

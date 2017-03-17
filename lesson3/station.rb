@@ -1,5 +1,5 @@
 class Station
-  attr_reader :name
+  attr_reader :name, :trains
     
   def initialize(name)
     @name = name
@@ -8,15 +8,6 @@ class Station
 
   def arrive_train(train)
     @trains << train
-  end
-
-  def trains
-    puts "Поезда, находящиеся на стании #{@name}"
-    @trains.each do |train|
-      if train.speed == 0
-        puts "Поезд №#{train.number} тип: #{train.type} вагонов: #{train.count_carriages}"
-      end
-    end
   end
   
   def trains_by_type(type)
