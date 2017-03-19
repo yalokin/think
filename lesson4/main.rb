@@ -13,5 +13,7 @@ app = Application.new
 loop do
   app.action_menu(app.print_menu)
   puts
+  p app.stations
   p app.trains
+  p app.routes
 end

@@ -1,5 +1,6 @@
 class Application
   attr_reader :stations, :trains, :routes
+  
   def initialize
     @stations = {}
     @trains = {}
@@ -28,19 +29,15 @@ class Application
     number = gets.chomp.to_i
     
     if type == 1 && train_not_exist?(number)
-      @trains[number] = CargoTrain.new(number)
+      @trains[number] = PassengerTrain.new(number)
       puts "Train #{number} was added"
     elsif type == 2 && train_not_exist?(number)
-      @trains[number] = PassengerTrain.new(number)
+      @trains[number] = CargoTrain.new(number)
       puts "Train #{number} was added"
     elsif @trains[number]
       puts "Train #{number} already exists"
     end  
 
-  end
-
-  def train_not_exist?(number)
-    true unless @trains[number]
   end
 
   def make_route
@@ -58,59 +55,62 @@ class Application
 
   def assign_route
 
-    puts "Choice train number"   
-    print_trains
-    n_train = gets.chomp.to_i
+    n_train = choose_train
 
     puts "Choice route to assign to train #{n_train}"
     print_routes
-    n_route = gets.chomp.to_i - 1
+    n_route = gets.chomp.to_i
 
     @trains[n_train].add_route(@routes[n_route])
-
+    @routes[n_route].stations[0].arrive_train(n_train)
   end
 
   def add_carriage
     
-    puts "Choice train number"   
-    print_trains
-    n_train = gets.chomp.to_i
+    n_train = choose_train
+    type = @trains[n_train].class.to_s
 
-    puts "What type of carriage to attach?"
-    puts "1 - if passenger or 2 - if cargo "
-    type = gets.chomp.to_i
-
-    if type == 1
+    if type == 'PassengerTrain'
       @trains[n_train].add_carriage(PassengerCarriage.new)
-    elsif type ==2
+    elsif type == 'CargoTrain'
       @trains[n_train].add_carriage(CargoCarriage.new)
-    end
-
+    end    
+    puts "The carriage was added"
   end
 
   def remove_carriage
+    n_train = choose_train
+    @trains[n_train].remove_carriage
+    puts "Carriage was deleted"
   end
 
   def move_train_next
+    n_train = choose_train
+    @trains[n_train].move_next    
   end
 
   def move_train_previous
+    n_train = choose_train
+    @trains[n_train].move_previous
   end
 
   def print_stations
+    @stations.each_value do |station_obj|
+      puts "#{station_obj.name}"
+    end
   end
 
   def print_station_trains
+    puts "Choose station from list"
+    print_stations
+    station = gets.strip
+    p @stations[station.to_sym].trains
   end
 
   def print_routes
     @routes.each_with_index do |route, i|
-      puts "#{i + 1} - #{route.stations[0].name} #{route.stations[-1].name}" 
+      puts "#{i} - #{route.stations[0].name} #{route.stations[-1].name}" 
     end
-  end
-
-  def print_trains
-    @trains.each_key { |key| puts "#{key}" }
   end
 
   def print_menu
@@ -121,25 +121,15 @@ class Application
     puts "4 - To assign a route to the train"
     puts "5 - To add а carriage to the train"
     puts "6 - To remove а carriage from the train"
-    puts "7 - To move a train along a route"
-    puts "8 - See all stations"
-    puts "9 - See trains on the station"
-    puts "10 - Exit"
+    puts "7 - Move train to the next station"
+    puts "8 - Move train to the previous station"
+    puts "9 - See all stations"
+    puts "10 - See trains on the station"
+    puts "11 - Exit"
     select = gets.chomp.to_i
-    exit if select == 10 
+    exit if select == 11 
     return select
   end
-
-# 1 Создавать станции
-# 2 Создавать поезда
-# 3 Создавать маршруты и управлять станциями в нем (добавлять, удалять)
-# 4 Назначать маршрут поезду
-# 5 Добавлять вагоны к поезду
-# 6 Отцеплять вагоны от поезда
-# 7 Перемещать поезд по маршруту вперед
-# 8 Перемещать поезд назад 
-# 9 Просматривать список станций и 
-# 10 список поездов на станции
 
   def action_menu(select)
     case select
@@ -165,4 +155,24 @@ class Application
       print_station_trains
     end
   end
+
+  private
+  #потому что используются только внутри методов класса
+
+  def train_not_exist?(number)
+    true unless @trains[number]
+  end
+
+  def print_trains
+    @trains.each_key { |key| puts "#{key}" }
+  end
+
+  def choose_train
+
+    puts "Choice train number"   
+    print_trains
+    n_train = gets.chomp.to_i
+
+  end
+
 end

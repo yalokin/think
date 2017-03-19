@@ -20,8 +20,8 @@ class Train
     @carriages << carriage if @speed == 0  
   end
 
-  def remove_carriage(carriage)
-    @carriages.delete(carriage) if @speed == 0 
+  def remove_carriage
+    @carriages.delete_at(-1) if @speed == 0 
   end
 
   def add_route(route)

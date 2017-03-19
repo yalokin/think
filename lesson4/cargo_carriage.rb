@@ -1,2 +1,2 @@
-class CargoCarriage < Carriage
+class CargoCarriage
 end
