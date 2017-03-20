@@ -122,7 +122,12 @@ class Application
 
   def add_carriage   
     n_train = choose_train
+    unless n_train
+     return
+    end
+
     @trains[n_train].add_carriage
+    puts "Carriage was added"
   end
 
   def remove_carriage
