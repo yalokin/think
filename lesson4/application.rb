@@ -1,116 +1,11 @@
 class Application
+  #только на время отладки, затем убрать
   attr_reader :stations, :trains, :routes
-  
+
   def initialize
     @stations = {}
     @trains = {}
     @routes = []
-  end
-
-  def make_station
-    
-    print "Enter name of the station: "
-    name = gets.strip
-    
-    if @stations[name.to_sym].nil? 
-      @stations[name.to_sym] = Station.new(name)
-      puts "Station #{name} was added"
-    else
-      puts "Station #{name} already exists"
-    end
-  end
-
-  def make_train
-    
-    print "Enter type of train, 1 - passenger, 2 - cargo: " 
-    type = gets.chomp.to_i
-    
-    print "Enter number of train: "
-    number = gets.chomp.to_i
-    
-    if type == 1 && train_not_exist?(number)
-      @trains[number] = PassengerTrain.new(number)
-      puts "Train #{number} was added"
-    elsif type == 2 && train_not_exist?(number)
-      @trains[number] = CargoTrain.new(number)
-      puts "Train #{number} was added"
-    elsif @trains[number]
-      puts "Train #{number} already exists"
-    end  
-
-  end
-
-  def make_route
-    print "Enter first station: "
-    first_station = gets.strip
-    print "Enter last station: "
-    last_station = gets.strip
-
-    if @stations[first_station.to_sym] && @stations[last_station.to_sym]
-      @routes << Route.new(@stations[first_station.to_sym], @stations[last_station.to_sym])
-    else
-      puts "Stations do not exist" 
-    end
-  end
-
-  def assign_route
-
-    n_train = choose_train
-
-    puts "Choice route to assign to train #{n_train}"
-    print_routes
-    n_route = gets.chomp.to_i
-
-    @trains[n_train].add_route(@routes[n_route])
-    @routes[n_route].stations[0].arrive_train(n_train)
-  end
-
-  def add_carriage
-    
-    n_train = choose_train
-    type = @trains[n_train].class.to_s
-
-    if type == 'PassengerTrain'
-      @trains[n_train].add_carriage(PassengerCarriage.new)
-    elsif type == 'CargoTrain'
-      @trains[n_train].add_carriage(CargoCarriage.new)
-    end    
-    puts "The carriage was added"
-  end
-
-  def remove_carriage
-    n_train = choose_train
-    @trains[n_train].remove_carriage
-    puts "Carriage was deleted"
-  end
-
-  def move_train_next
-    n_train = choose_train
-    @trains[n_train].move_next    
-  end
-
-  def move_train_previous
-    n_train = choose_train
-    @trains[n_train].move_previous
-  end
-
-  def print_stations
-    @stations.each_value do |station_obj|
-      puts "#{station_obj.name}"
-    end
-  end
-
-  def print_station_trains
-    puts "Choose station from list"
-    print_stations
-    station = gets.strip
-    p @stations[station.to_sym].trains
-  end
-
-  def print_routes
-    @routes.each_with_index do |route, i|
-      puts "#{i} - #{route.stations[0].name} #{route.stations[-1].name}" 
-    end
   end
 
   def print_menu
@@ -159,8 +54,114 @@ class Application
   private
   #потому что используются только внутри методов класса
 
-  def train_not_exist?(number)
-    true unless @trains[number]
+  def make_station  
+    print "Enter name of the station: "
+    name = gets.strip.to_sym
+
+    unless @stations.has_key?(name)
+      @stations[name] = Station.new(name.to_s)
+      puts "Station #{name} was added"
+    else
+      puts "Station #{name} already exists"
+    end
+  end
+
+  def make_train
+    print "Enter number of train: "
+    number = gets.chomp.to_i
+    if train_exists?(number)
+      print 'Train #{number} already exists'
+      return
+    end
+
+    print "Enter type of train, 1 - passenger, 2 - cargo: " 
+    type = gets.chomp.to_i
+    if type == 1
+      @trains[number] = PassengerTrain.new(number)
+      puts "Train #{number} was added"
+    elsif type == 2
+      @trains[number] = CargoTrain.new(number)
+      puts "Train #{number} was added"
+    end  
+  end
+
+  def make_route
+    print "Enter first station: "
+    first_station = gets.strip.to_sym
+    print "Enter last station: "
+    last_station = gets.strip.to_sym
+
+    if @stations.has_key?(first_station) && @stations.has_key?(last_station)
+      @routes << Route.new(@stations[first_station], @stations[last_station])
+      puts "Route #{first_station} - #{last_station} was created"
+    else
+      puts "Stations do not exist"
+      return 
+    end
+  end
+
+  def assign_route
+    n_train = choose_train
+    unless n_train
+     return
+    end
+
+    puts "Choice route to assign to train #{n_train}"
+    print_routes
+    n_route = gets.chomp.to_i
+
+    if @routes[n_route]
+      @trains[n_train].add_route(@routes[n_route])
+      @routes[n_route].stations[0].arrive_train(n_train)
+      puts "The route was assigned to the train - #{n_train}"
+    else
+      puts "The selected route does not exist"
+      return
+    end
+  end
+
+  def add_carriage   
+    n_train = choose_train
+    @trains[n_train].add_carriage
+  end
+
+  def remove_carriage
+    n_train = choose_train
+    @trains[n_train].remove_carriage
+    puts "Carriage was deleted"
+  end
+
+  def move_train_next
+    n_train = choose_train
+    @trains[n_train].move_next    
+  end
+
+  def move_train_previous
+    n_train = choose_train
+    @trains[n_train].move_previous
+  end
+
+  def print_stations
+    @stations.each_value do |station_obj|
+      puts "#{station_obj.name}"
+    end
+  end
+
+  def print_station_trains
+    puts "Choose station from list"
+    print_stations
+    station = gets.strip
+    p @stations[station.to_sym].trains
+  end
+
+  def print_routes
+    @routes.each.with_index(1) do |route, i|
+      puts "#{i} - #{route.stations[0].name} #{route.stations[-1].name}" 
+    end
+  end
+
+  def train_exists?(number)
+    @trains.has_key?(number)
   end
 
   def print_trains
@@ -168,11 +169,15 @@ class Application
   end
 
   def choose_train
-
     puts "Choice train number"   
     print_trains
     n_train = gets.chomp.to_i
 
+    if @trains.has_key?(n_train)
+      return n_train
+    else
+      puts "The selected train does not exist"
+      return 
+    end
   end
-
 end

@@ -16,10 +16,6 @@ class Train
     @speed = 0
   end
 
-  def add_carriage(carriage)
-    @carriages << carriage if @speed == 0  
-  end
-
   def remove_carriage
     @carriages.delete_at(-1) if @speed == 0 
   end
