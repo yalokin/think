@@ -1,5 +1,5 @@
 class Train
-    attr_reader :number, :speed, :count_carriages
+    attr_reader :number, :speed
 
   def initialize(number)
     @number = number
@@ -14,6 +14,10 @@ class Train
 
   def stop
     @speed = 0
+  end
+
+  def add_carriage(carriage)
+    @carriages << carriage if @speed == 0 && correct_carriage?(carriage) 
   end
 
   def remove_carriage
@@ -44,5 +48,9 @@ class Train
   def previous_station
     @route.stations[@station_index - 1] if @station_index > 0
   end
-  # пока что не вижу какие методы можно определить в секции private и protected
+  private
+  # так как используется только в этом классе
+  def correct_carriage?(carriage)
+    true if carriage.instance_of?(CargoCarriage) && self.instance_of?(CargoTrain) || carriage.instance_of?(PassengerCarriage) && self.instance_of?(PassengerTrain)
+  end
 end

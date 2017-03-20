@@ -126,8 +126,22 @@ class Application
      return
     end
 
-    @trains[n_train].add_carriage
-    puts "Carriage was added"
+    carriage = make_carriage
+    @trains[n_train].add_carriage(carriage) if carriage
+  end
+
+  def make_carriage
+    puts "Enter 1 if add passenger carriage or"
+    puts "2 if add cargo carriage"
+    type = gets.chomp.to_i
+    if type == 1
+      return @carriage = PassengerCarriage.new
+    elsif type == 2
+      return @carriage = CargoCarriage.new
+    else
+      puts "1 or 2!"
+      return   
+    end
   end
 
   def remove_carriage
