@@ -17,7 +17,7 @@ class Train
   end
 
   def add_carriage(carriage)
-    @carriages << carriage if @speed == 0 && self.correct_carriage?(carriage) 
+    @carriages << carriage if @speed == 0 && correct_carriage?(carriage) 
   end
 
   def remove_carriage
