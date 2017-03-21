@@ -102,9 +102,7 @@ class Application
 
   def assign_route
     n_train = choose_train
-    unless n_train
-     return
-    end
+    return unless n_train
 
     puts "Choice route to assign to train #{n_train}"
     print_routes
@@ -122,9 +120,7 @@ class Application
 
   def add_carriage   
     n_train = choose_train
-    unless n_train
-     return
-    end
+    return unless n_train
 
     carriage = make_carriage
     @trains[n_train].add_carriage(carriage) if carriage
@@ -135,9 +131,9 @@ class Application
     puts "2 if add cargo carriage"
     type = gets.chomp.to_i
     if type == 1
-      return @carriage = PassengerCarriage.new
+      @carriage = PassengerCarriage.new
     elsif type == 2
-      return @carriage = CargoCarriage.new
+      @carriage = CargoCarriage.new
     else
       puts "1 or 2!"
       return   

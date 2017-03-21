@@ -17,7 +17,7 @@ class Train
   end
 
   def add_carriage(carriage)
-    @carriages << carriage if @speed == 0 && correct_carriage?(carriage) 
+    @carriages << carriage if @speed == 0 && self.correct_carriage?(carriage) 
   end
 
   def remove_carriage
@@ -47,10 +47,5 @@ class Train
 
   def previous_station
     @route.stations[@station_index - 1] if @station_index > 0
-  end
-  private
-  # так как используется только в этом классе
-  def correct_carriage?(carriage)
-    true if carriage.instance_of?(CargoCarriage) && self.instance_of?(CargoTrain) || carriage.instance_of?(PassengerCarriage) && self.instance_of?(PassengerTrain)
   end
 end
