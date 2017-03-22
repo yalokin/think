@@ -3,7 +3,6 @@ class Train
 
   def initialize(number)
     @number = number
-    @type = self.class
     @speed = 0
     @carriages = []
   end
