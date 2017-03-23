@@ -1,9 +1,15 @@
 class Station
+  @@stations = {}
+
+  def self.all
+    @@stations
+  end
   attr_reader :name, :trains
     
   def initialize(name)
     @name = name
     @trains = []
+    @@stations[name] = self
   end
 
   def arrive_train(train)

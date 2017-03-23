@@ -1,10 +1,20 @@
+require_relative 'manufacturer'
 class Train
-    attr_reader :number, :speed
+  include Manufacturer
+
+  @@trains = {}
+
+  def self.find(number)
+    @@trains[number]
+  end
+
+  attr_reader :number, :speed
 
   def initialize(number)
     @number = number
     @speed = 0
     @carriages = []
+    @@trains[number] = self
   end
 
   def speed_up(speed)
