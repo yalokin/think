@@ -1,6 +1,8 @@
+require_relative 'instance_counter'
 require_relative 'manufacturer'
 class Train
   include Manufacturer
+  include InstanceCounter
 
   @@trains = {}
 
@@ -15,6 +17,7 @@ class Train
     @speed = 0
     @carriages = []
     @@trains[number] = self
+    register_instance
   end
 
   def speed_up(speed)

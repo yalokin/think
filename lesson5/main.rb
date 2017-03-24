@@ -7,12 +7,11 @@ require_relative 'carriage'
 require_relative 'cargo_carriage'
 require_relative 'passenger_carriage'
 require_relative 'application'
-require_relative 'instance_counter'
 
 app = Application.new
 
 loop do
   app.action_menu(app.print_menu)
   puts
-  p Train.find(95)
+  p Train.instances
 end
