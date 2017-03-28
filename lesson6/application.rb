@@ -72,7 +72,7 @@ class Application
     print "Enter number of train: "
     number = gets.strip
     if train_exists?(number)
-      print 'Train #{number} already exists'
+      print "Train #{number} already exists"
       return
     end
 
