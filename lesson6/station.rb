@@ -1,5 +1,8 @@
+require_relative 'instance_counter'
 require_relative 'validate'
 class Station
+  include Validate
+  
   @@stations = {}
 
   def self.all
@@ -11,19 +14,13 @@ class Station
   end
 
   attr_reader :name, :trains
-
-  include Validate
-
-  def validate!
-    raise "Name of station can't be empty" if name.length == 0
-    true
-  end
     
   def initialize(name)
     @name = name
     validate!
     @trains = []
     @@stations[name] = self
+   # register_instance
   end
 
   def arrive_train(train)
@@ -36,5 +33,13 @@ class Station
 
   def depart_train(train)
     @trains.delete(train)  
+  end
+  
+  protected
+
+  def validate!
+    raise "Name of station can't be nil" if name.nil?
+    raise "Name of station can't be empty" if name.length == 0
+    true
   end
 end

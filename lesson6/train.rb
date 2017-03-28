@@ -4,6 +4,7 @@ require_relative 'validate'
 
 class Train
   include Manufacturer
+  # include InstanceCounter
   include InstanceCounter
   include Validate
 
