@@ -15,6 +15,10 @@ class PassengerCarriage < Carriage
   def occupied_seats 
     @seats - @free_seats
   end
+
+  def puts_info
+    "Type: #{self.class} Free seats: #{free_seats} Occupied seats: #{occupied_seats}"
+  end
  
   protected
 

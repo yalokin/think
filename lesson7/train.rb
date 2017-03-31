@@ -72,7 +72,7 @@ class Train
   end
 
   def each_carriage
-    carriages.each { |carriage| yield(carriage)}
+    carriages.each.with_index(1) { |carriage, number| yield(carriage, number)}
   end
 
   protected

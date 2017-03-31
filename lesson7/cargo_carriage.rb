@@ -16,6 +16,10 @@ class CargoCarriage < Carriage
     @volume - @free_volume
   end
 
+  def info
+    "Type: #{self.class} Free volume: #{free_volume} Occupied seats: #{occupied_volume}"
+  end
+
   protected
 
   def validate!

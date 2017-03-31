@@ -10,6 +10,7 @@ class Station
   end
 
   def self.find(name)
+    raise "Station does not exists" if @@stations[name].nil?  
     @@stations[name]
   end
 
@@ -18,13 +19,12 @@ class Station
   def initialize(name)
     @name = name
     validate!
-    @trains = []
+    @trains = {}
     @@stations[name] = self
-   # register_instance
   end
 
   def arrive_train(train)
-    @trains << train
+    @trains[train.number] = train
   end
   
   def trains_by_type(type)
@@ -36,7 +36,12 @@ class Station
   end
 
   def each_train
-    trains.each { |train| yield(train)}  
+    @trains.each { |train| yield(train)}  
+  end
+
+  def train_exists?(number)
+    raise "Train doesn not exists on a station" if @trains[number].nil?
+    true
   end
   
   protected

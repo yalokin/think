@@ -1,7 +1,3 @@
-# При создании вагона указывать кол-во мест или общий объем, в зависимости от типа вагона
-# Выводить список вагонов у поезда (в указанном выше формате)
-# Выводить список поездов на станции (в указанном выше формате)
-# Занимать место или объем в вагоне
 class Application
   #только на время отладки, затем убрать
   attr_reader :stations, :trains, :routes
@@ -24,9 +20,10 @@ class Application
     puts "8 - Move train to the previous station"
     puts "9 - See all stations"
     puts "10 - See trains on the station"
-    puts "11 - Exit"
+    puts "11 - See information about train"
+    puts "0 - Exit"
     select = gets.chomp.to_i
-    exit if select == 11 
+    exit if select == 0 
     return select
   end
 
@@ -52,6 +49,8 @@ class Application
       print_stations
     when 10
       print_station_trains
+    when 11
+      train_info
     end
   end
 
@@ -75,7 +74,7 @@ class Application
   def make_train
     print "Enter number of train: "
     number = gets.strip
-    if train_exists?(number)
+    if Train.find(number)
       print "Train #{number} already exists"
       return
     end
@@ -112,11 +111,12 @@ class Application
 
     puts "Choice route to assign to train #{n_train}"
     print_routes
-    n_route = gets.chomp.to_i
-
-    if @routes[n_route]
-      @trains[n_train].add_route(@routes[n_route])
-      @routes[n_route].stations[0].arrive_train(n_train)
+    route = Route.find(gets.strip)
+    train = Train.find(n_train)
+    
+    if route
+      train.add_route(route)
+      route.stations[0].arrive_train(train)
       puts "The route was assigned to the train - #{n_train}"
     else
       puts "The selected route does not exist"
@@ -175,20 +175,36 @@ class Application
   def print_station_trains
     puts "Choose station from list"
     print_stations
-    station = gets.strip
-    p @stations[station].trains
+    station = Station.find(gets.strip)
+    if station
+      station.each_train { |train| puts "Number: #{train.number} Type: #{train.class} Carriages: #{train.carriages.size}"}
+    else
+      puts "Station does not exists"
+    end
   end
 
   def print_routes
-    Route.all.each_value.with_index(1) { |route, i| puts "#{i} - #{route.name}" }
-  end
-
-  def train_exists?(number)
-    @trains.has_key?(number)
+    Route.all.each_value { |route| puts "Route - #{route.name}" }
   end
 
   def print_trains
-    @trains.each_key { |key| puts "#{key}" }
+    Train.all.each_value { |train| puts "#{train.number}" }
+  end
+
+  def train_info
+    puts "Choise station"
+    print_stations
+    station = Station.find(gets.strip)
+    puts "Choice number of train"
+    print_trains
+    train_number = gets.strip
+    if station.train_exists?(train_number)
+      train = Train.find(train_number)  
+      train.each_carriage { |carriage, number| puts "No: #{number} #{carriage.info}"}
+    end
+  
+  rescue RuntimeError => e
+    puts e.message 
   end
 
   def choose_train
@@ -196,8 +212,8 @@ class Application
     print_trains
     n_train = gets.strip
 
-    if @trains.has_key?(n_train)
-      return n_train
+    if Train.find(n_train)
+      n_train
     else
       puts "The selected train does not exist"
       return 
