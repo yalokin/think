@@ -1,12 +1,24 @@
 require_relative 'validate'
-class Route 
-  attr_reader :stations
+class Route
+  @@routes = {}
+
+  def self.find(name)
+    @@routes[name]
+  end
+
+  def self.all
+    @@routes
+  end
+
+  attr_reader :stations, :name
 
   include Validate
 
   def initialize(start_station, end_station)
     @stations = [start_station, end_station]
     validate!
+    @name = "#{start_station.name}-#{end_station.name}"
+    @@routes[@name] = self
   end
 
   def add_station(station)

@@ -1,3 +1,7 @@
+# При создании вагона указывать кол-во мест или общий объем, в зависимости от типа вагона
+# Выводить список вагонов у поезда (в указанном выше формате)
+# Выводить список поездов на станции (в указанном выше формате)
+# Занимать место или объем в вагоне
 class Application
   #только на время отладки, затем убрать
   attr_reader :stations, :trains, :routes
@@ -133,13 +137,17 @@ class Application
     puts "2 if add cargo carriage"
     type = gets.chomp.to_i
     if type == 1
-      @carriage = PassengerCarriage.new
+      puts "Enter number of seats"
+      @carriage = PassengerCarriage.new(gets.chomp)
     elsif type == 2
-      @carriage = CargoCarriage.new
+      puts "Enter volume of carriage"   
+      @carriage = CargoCarriage.new(gets.chomp)
     else
       puts "1 or 2!"
       return   
     end
+  rescue RuntimeError => e
+    puts e.message 
   end
 
   def remove_carriage
@@ -168,13 +176,11 @@ class Application
     puts "Choose station from list"
     print_stations
     station = gets.strip
-    p @stations[station.to_sym].trains
+    p @stations[station].trains
   end
 
   def print_routes
-    @routes.each.with_index(1) do |route, i|
-      puts "#{i} - #{route.stations[0].name} #{route.stations[-1].name}" 
-    end
+    Route.all.each_value.with_index(1) { |route, i| puts "#{i} - #{route.name}" }
   end
 
   def train_exists?(number)

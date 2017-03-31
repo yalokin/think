@@ -3,6 +3,7 @@ class CargoCarriage < Carriage
 
   def initialize(volume)
     @volume = volume.to_f
+    validate!
     @free_volume = @volume
   end
 
@@ -13,6 +14,14 @@ class CargoCarriage < Carriage
 
   def occupied_volume
     @volume - @free_volume
+  end
+
+  protected
+
+  def validate!
+    raise "The volume of carriage can not be nil" if @volume.nil?
+    raise "Volume of carriage, must be greater than 0" if @volume.zero? 
+    true
   end
  
 end

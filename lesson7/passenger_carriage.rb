@@ -3,6 +3,7 @@ class PassengerCarriage < Carriage
 
   def initialize(seats)
     @seats = seats.to_i
+    validate!
     @free_seats = @seats
   end
 
@@ -13,6 +14,14 @@ class PassengerCarriage < Carriage
   
   def occupied_seats 
     @seats - @free_seats
+  end
+ 
+  protected
+
+  def validate!
+    raise "The number of seats can not be nil" if @seats.nil?
+    raise "Number of seats, must be greater than 0" if @seats < 1
+    true
   end
 
 end

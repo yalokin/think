@@ -15,6 +15,10 @@ class Train
     @@trains[number]
   end
 
+  def self.all
+    @@trains
+  end
+
   attr_reader :number, :speed, :carriages
 
   def initialize(number)

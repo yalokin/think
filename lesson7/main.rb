@@ -12,4 +12,5 @@ app = Application.new
 
 loop do
   app.action_menu(app.print_menu)
+  p Train.all
 end
