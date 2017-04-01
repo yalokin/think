@@ -36,7 +36,7 @@ class Station
   end
 
   def each_train
-    @trains.each { |train| yield(train)}  
+    @trains.each_value { |train| yield(train)}  
   end
 
   def train_exists?(number)
