@@ -17,7 +17,8 @@ class CargoCarriage < Carriage
   end
 
   def info
-    "Type: #{self.class} Free volume: #{free_volume} Occupied seats: #{occupied_volume}"
+    "Type: #{self.class} Free volume:\
+     #{free_volume} Occupied seats: #{occupied_volume}"
   end
 
   protected

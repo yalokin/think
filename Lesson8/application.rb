@@ -1,6 +1,4 @@
 class Application
-  # только на время отладки, затем убрать
-  attr_reader :stations, :trains, :routes
 
   MENU = { 1 => ['make_station', 'To create a station'],
            2 => ['make_train', 'To create a train'],
@@ -14,12 +12,6 @@ class Application
            10 => ['print_station_trains', 'See trains on the station'],
            11 => ['train_info', 'See information about train'],
            0 => %w(exit Exit) }.freeze
-
-  # def initialize
-  #   @stations = {}
-  #   @trains = {}
-  #   @routes = []
-  # end
 
   def menu
     puts 'Enter your number of action'
@@ -42,7 +34,6 @@ class Application
   def make_station
     print 'Enter name of the station: '
     name = gets.strip
-
     if Station.exist?(name)
       puts "Station #{name} already exists"
     else
@@ -78,7 +69,6 @@ class Application
     first_station = gets.strip
     print 'Enter last station: '
     last_station = gets.strip
-
     Route.new(Station.find(first_station), Station.find(last_station))
     puts "Route #{first_station} - #{last_station} was created"
   rescue RuntimeError => e
@@ -88,12 +78,10 @@ class Application
   def assign_route
     n_train = choose_train
     return unless n_train
-
     puts "Choice route to assign to train #{n_train}"
     print_routes
     route = Route.find(gets.strip)
     train = Train.find(n_train)
-
     if route
       train.add_route(route)
       route.stations[0].arrive_train(train)
@@ -107,7 +95,6 @@ class Application
   def add_carriage
     n_train = choose_train
     return unless n_train
-
     carriage = make_carriage
     Train.find(n_train).add_carriage(carriage) if carriage
   end
@@ -157,7 +144,9 @@ class Application
     print_stations
     station = Station.find(gets.strip)
     if station
-      station.each_train { |train| puts "Number: #{train.number} Type: #{train.class} Carriages: #{train.carriages.size}" }
+      station.each_train do |train|
+        puts "Number: #{train.number} Type: #{train.class} Carriages: #{train.carriages.size}"
+      end
     else
       puts 'Station does not exists'
     end
@@ -190,7 +179,6 @@ class Application
     puts 'Choice train number'
     print_trains
     n_train = gets.strip
-
     if Train.find(n_train)
       n_train
     else

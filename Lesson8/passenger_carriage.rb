@@ -17,7 +17,8 @@ class PassengerCarriage < Carriage
   end
 
   def puts_info
-    "Type: #{self.class} Free seats: #{free_seats} Occupied seats: #{occupied_seats}"
+    "Type: #{self.class} Free seats:\
+     #{free_seats} Occupied seats: #{occupied_seats}"
   end
 
   protected
