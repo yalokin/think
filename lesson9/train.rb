@@ -3,9 +3,9 @@ require_relative 'manufacturer'
 require_relative 'validation'
 
 class Train
+  include Validation
   include Manufacturer
   include InstanceCounter
-  include Validation
 
   VALID_NUMBER = /^[a-z0-9]{3}-{0,1}[a-z0-9]{2}$/i
 
@@ -21,6 +21,7 @@ class Train
 
   attr_reader :number, :speed, :carriages
 
+  validate :number, :presence
   validate :number, :format, VALID_NUMBER
 
   def initialize(number)

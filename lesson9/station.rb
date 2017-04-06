@@ -10,7 +10,7 @@ class Station
   end
 
   def self.find(name)
-    raise 'Station does not exists' if @@stations[name].nil?
+    raise 'Station does not exist' if @@stations[name].nil?
     @@stations[name]
   end
 
@@ -19,6 +19,8 @@ class Station
   end
 
   attr_reader :name, :trains
+
+  validate :name, :presence
 
   def initialize(name)
     @name = name
@@ -45,14 +47,6 @@ class Station
 
   def train_exists?(number)
     raise 'Train doesn not exists on a station' if @trains[number].nil?
-    true
-  end
-
-  protected
-
-  def validate!
-    raise "Name of station can't be nil" if name.nil?
-    raise "Name of station can't be empty" if name.length.zero?
     true
   end
 end
