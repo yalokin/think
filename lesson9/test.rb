@@ -22,23 +22,20 @@ class Test
 
   validate :article, :presence
   validate :article, :type, String
-  validate :article, :format, /^T-\d{5}/ # T-12345
+  validate :article, :format, /\d{5}/ # 12345
 
   validate :number, :presence
   validate :number, :type, Integer
 end
 
-test = Test.new('123456789012', 'T-12345', 30)
+p test = Test.new('123456789012', 'T-12345', 30)
 
+# test.barcode = '123456789011z'
+# test.article = 'T-12346'
+# test.number = 99
+# p test.valid?
+# test.validate!
 
+#  test.barcode = '123456789013'
 
-test.barcode = '123456789011'
-test.article = 'T-12346' 
-test.number = 123
-p test.valid?
-test.validate!
-
-test.barcode = '123456789013'
-
-
-p test.barcode_history
+# p test.barcode_history

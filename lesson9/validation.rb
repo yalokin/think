@@ -7,9 +7,9 @@ module Validation
 
   module ClassMethods
 
-    def validate(attr_name, type, *args)
+    def validate(attr_name, type, arg = nil)
       @validations ||= []
-      @validations << [attr_name.to_sym, type.to_sym, args[0]]
+      @validations << [attr_name.to_sym, type.to_sym, arg]
     end
 
   end
@@ -18,32 +18,29 @@ module Validation
 
     def validate!
       self.class.instance_variable_get(:@validations).each do |validation|
-        send validation[1], validation[0], validation[2]
+        send validation[1], instance_variable_get("@#{validation[0]}"), validation[2] unless validation[2].nil?
       end
     end
 
     def valid?
       validate!
+      true
     rescue
       false
     end
 
     private
 
-    def presence(attr_name, *args)
-      raise "#{attr_name} is nil or empty" if var_value(attr_name).nil? || var_value(attr_name).to_s.empty?
+    def presence(attr)
+      raise "#{attr} is nil or empty" if attr.to_s.empty?
     end
 
-    def format(attr_name, regexp)
-      raise "Wrong format of argument: #{attr_name}" unless var_value(attr_name) =~ regexp
+    def format(attr, regexp)
+      raise "Wrong format of argument: #{attr}" unless attr =~ regexp
     end
 
-    def type(attr_name, type)
-      raise "Wrong type of argument: #{attr_name}" unless var_value(attr_name).is_a?(type)
-    end
-
-    def var_value(attr_name)
-      instance_variable_get("@#{attr_name}")
+    def type(attr, type)
+      raise "Wrong type of argument: #{attr}" unless attr.is_a?(type)
     end
   end
 end

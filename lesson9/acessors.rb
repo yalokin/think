@@ -10,11 +10,11 @@ module Acessors
       define_method("#{name}=".to_sym) do |value|
         instance_variable_set(var_name, value)
         @history ||= {}
-        @history[var_name] ||= []
-        @history[var_name] << value
+        @history[name] ||= []
+        @history[name] << value
       end
 
-      define_method("#{name}_history") { @history[var_name] }
+      define_method("#{name}_history") { @history[name] }
     end
   end
 
@@ -24,7 +24,7 @@ module Acessors
     define_method(name) { instance_variable_get(var_name) }
 
     define_method("#{name}=".to_sym) do |value|
-      raise "Wrong type of variable" if value.class != type.to_s
+      raise "Wrong type of variable" unless value.is_a? type
       instance_variable_set(var_name, value)
     end
   end
