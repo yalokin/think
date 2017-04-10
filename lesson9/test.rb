@@ -18,11 +18,11 @@ class Test
 
   validate :barcode, :presence
   validate :barcode, :type, String
-  validate :barcode, :format, /^\d{12}/ #123456789012
+  validate :barcode, :format, /\d{12}/ #'123456789012'
 
   validate :article, :presence
   validate :article, :type, String
-  validate :article, :format, /\d{5}/ # 12345
+  validate :article, :format, /\d{5}/ # '12345'
 
   validate :number, :presence
   validate :number, :type, Integer

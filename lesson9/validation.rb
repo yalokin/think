@@ -18,7 +18,7 @@ module Validation
 
     def validate!
       self.class.instance_variable_get(:@validations).each do |validation|
-        send validation[1], instance_variable_get("@#{validation[0]}"), validation[2] unless validation[2].nil?
+        send validation[1], instance_variable_get("@#{validation[0]}"), validation[2]
       end
     end
 
@@ -31,7 +31,7 @@ module Validation
 
     private
 
-    def presence(attr)
+    def presence(attr, *arg)
       raise "#{attr} is nil or empty" if attr.to_s.empty?
     end
 
